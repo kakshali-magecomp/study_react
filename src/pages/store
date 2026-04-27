@@ -1,123 +1,56 @@
-import { useState , useEffect } from "react";
+import { useState } from "react";
 
-function Deshbord() {
-    const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : [];
-    });
+function TodoApp() {
+  const [tasks, setTasks] = useState([]);
+  const [input, setInput] = useState("");
+  const [editIndex, setEditIndex] = useState(null);
 
-    useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    }, [tasks]);
+  const handleAddOrUpdate = () => {
+    if (input.trim() === "") return;
 
-    const[inputValue,setInputValue] = useState("");
-
-
-    const handleAddTask = () => {
-    if (inputValue.trim() !== '') {
-      setTasks([...tasks, inputValue]);
-      setInputValue(''); 
+    if (editIndex !== null) {
+     
+      const updatedTasks = [...tasks];
+      updatedTasks[editIndex] = input;
+      setTasks(updatedTasks);
+      setEditIndex(null);
+    } else {
+      
+      setTasks([...tasks, input]);
     }
+
+    setInput(""); 
   };
 
-  const deleteTask = (index) => {
-    const newTasks = tasks.filter((_, i) => i !== index);
-    setTasks(newTasks);
+  const handleEdit = (index) => {
+    setInput(tasks[index]);   
+    setEditIndex(index);      
   };
-    
+
   return (
-  <>
-    <div style = {style.deshbord}>
-        <div style={style.contain}>
-            <div className="search" style={style.search} >
-                <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} style={style.input} placeholder="Enter Your Massage..."/>
+    <div>
+      <h2>Todo App</h2>
 
-                <button onClick={handleAddTask} style={style.Add}>Add</button>
-            </div>
-                
-           <div>
-              {tasks.map((task, index) => (
-                    <div key={index} style={style.leblecontain}>
-                    <span style={style.leble}>{task}</span>
-                    <div style={style.buttondelete}><button onClick={() => deleteTask(index)} style={style.delete}> <img style={style.img} src="./public/img/delete.png"/></button></div>
-                    </div>
-                ))}
-           </div>
-        </div>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter task"
+      />
+
+      <button onClick={handleAddOrUpdate}>
+        {editIndex !== null ? "Update" : "Add"}
+      </button>
+
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index}>
+            {task}
+            <button onClick={() => handleEdit(index)}>Edit</button>
+          </li>
+        ))}
+      </ul>
     </div>
-  </>
-);
-};
+  );
+}
 
-const style = {
-    deshbord: {
-        backgroundColor: '#3b82f6',
-        height: 500
-    },
-    contain: {
-        backgroundColor: "white", 
-        width: '50%' , 
-        justfycontect: 'cenetr',
-        margin : '0 auto',
-        marginTop: 50,
-        height: 'auto'
-  
-    },
-    search:{
-        display: 'grid',
-        gridTemplateColumns: 'auto auto',
-        justfycontect: 'cenetr',
-        paddingTop: '20px',
-        height: '100px'
-    },
-    input:{
-        backgroundColor : 'lightgreey',
-        height: 40,
-        borderRadius: 5,
-        border: '2px solid #3b82f6',
-        margin: '0 auto',
-        width: '110%',
-        marginLeft: '20px'
-    },
-    Add:{
-        backgroundColor: '#3b82f6',
-        border: 'none',
-        color: 'white',
-        borderRadius: 5,
-        height: 40,
-        width: '50%',
-        margin: '0 auto',
-        marginTop: '3px',
-        marginRight: '20px'
-    },
-    leblecontain:{
-       display: 'grid',
-       gridTemplateColumns: 'auto auto',
-       border:'1px solid grey',
-       borderRadius: 5 ,
-       width: '95%',
-       margin: '0 auto',
-       height: '50px',
-       alignItems: 'center',
-       marginBottom: 20,
-       backgroundColor: 'lightblue',
-       color: 'black'
-    },
-    delete:{
-      width: '60px',
-      backgroundColor: '#0a51c4',
-      borderRadius: '5px',
-      height: '40px'
-    },
-    img:{
-        width:'20px'
-    },
-    buttondelete:{
-        display: 'grid',
-        justifyContent: 'right',
-        marginRight: '20px'
-    }
-
-};
-
-export default Deshbord;
+export default TodoApp;

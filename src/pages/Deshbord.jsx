@@ -3,18 +3,39 @@ import { useState } from "react";
 function Deshbord() {
     const [tasks, setTasks] = useState([]);
     const[inputValue,setInputValue] = useState("");
-
+    const [editIndex, setEditValue] = useState(null);
+    
     const handleAddTask = () => {
-    if (inputValue.trim() !== '') {
-      setTasks([...tasks, inputValue]);
-      setInputValue(''); 
+        if (inputValue.trim() !== '') {
+            if (editIndex !== null) {
+                     if (tasks.includes(inputValue.toLowerCase().trim())) {
+                        alert('value already exist');
+                    }else{
+                        const updatedTasks = [...tasks];
+                        updatedTasks[editIndex] = inputValue;
+                        setTasks(updatedTasks); 
+                        setEditValue(null);
+                    }    
+            } else {
+                if (tasks.includes(inputValue.toLowerCase().trim())) {
+                        alert('value already exist');
+                }else{
+                        setTasks([...tasks, inputValue]);
+                }
+            }
+            setInputValue(""); 
+        };
     }
-  };
 
-  const deleteTask = (index) => {
-    const newTasks = tasks.filter((_, i) => i !== index);
-    setTasks(newTasks);
-  };
+    const EditTask = (index) => {
+        setInputValue(tasks[index]);   
+        setEditValue(index);      
+    }
+
+    const deleteTask = (index) => {
+        const newTasks = tasks.filter((_, i) => i !== index);
+        setTasks(newTasks);
+    }
     
   return (
   <>
@@ -26,18 +47,21 @@ function Deshbord() {
                 <button onClick={handleAddTask} style={style.Add}>Add</button>
             </div>
                 
-           <div style={style.lebleallcontain}>
+            <div style={style.lebleallcontain}>
               {tasks.map((task, index) => (
                     <div key={index} style={style.leblecontain}>
                     <span style={style.leble}>{task}</span>
-                    <div style={style.buttondelete}><button onClick={() => deleteTask(index)} style={style.delete}> <img style={style.img} src="./public/img/delete.png"/></button></div>
+                    <div style={style.buttondelete}>
+                    <button onClick={() => EditTask(index)} style={style.delete}> <img style={style.img} src="./public/img/edit.png"/></button>
+                    <button onClick={() => deleteTask(index)} style={style.delete}> <img style={style.img} src="./public/img/delete.png"/></button>
+                    </div>
                     </div>
                 ))}
-           </div>
+            </div>
         </div>
     </div>
   </>
-);
+    );
 };
 
 const style = {
@@ -108,8 +132,10 @@ const style = {
     },
     buttondelete:{
         display: 'grid',
+        gridTemplateColumns: 'auto auto',
         justifyContent: 'right',
-        marginRight: '20px'
+        marginRight: 20,
+        gap: 20
     },
     lebleallcontain:{
         height: 'auto',
