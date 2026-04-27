@@ -9,7 +9,7 @@ function Deshbord() {
         if (inputValue.trim() !== '') {
             if (editIndex !== null) {
                      if (tasks.includes(inputValue.toLowerCase().trim())) {
-                        alert('value already exist');
+                        alert('massage already exist');
                     }else{
                         const updatedTasks = [...tasks];
                         updatedTasks[editIndex] = inputValue;
@@ -18,7 +18,7 @@ function Deshbord() {
                     }    
             } else {
                 if (tasks.includes(inputValue.toLowerCase().trim())) {
-                        alert('value already exist');
+                        alert('massage already exist');
                 }else{
                         setTasks([...tasks, inputValue]);
                 }
