@@ -10,7 +10,11 @@ function Deshbord() {
             if (editIndex !== null) {
                      if (tasks.includes(inputValue.toLowerCase().trim())) {
                         alert('massage already exist');
-                    }else{
+                    }
+                    else if (!isNaN(inputValue) && !isNaN(parseFloat(inputValue))){
+                         alert('Number is not allowed');
+                    }
+                    else{
                         const updatedTasks = [...tasks];
                         updatedTasks[editIndex] = inputValue;
                         setTasks(updatedTasks); 
@@ -19,7 +23,10 @@ function Deshbord() {
             } else {
                 if (tasks.includes(inputValue.toLowerCase().trim())) {
                         alert('massage already exist');
-                }else{
+                }else if (!isNaN(inputValue) && !isNaN(parseFloat(inputValue))){
+                         alert('Number is not allowed');
+                    }
+                else{
                         setTasks([...tasks, inputValue]);
                 }
             }
